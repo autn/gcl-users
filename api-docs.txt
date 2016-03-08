@@ -1,0 +1,47 @@
+- Users + Role: PhpSoft-Users
+
+- Permissions tree:
+ + Get permissions tree: Route::get('/nodePermission')
+  #token: yes
+
+ + Create a permission node: Route::post('/nodePermission')
+  #input: name, display_name, description, parent_id (if parent is root: id = 1 or null or not provide)
+  #token: yes
+
+ + Update a permission node infomation: Route::patch('/nodePermission/{id}')
+  #input: id (url), name, display_name, description, parent_id (if parent is root: id = 1 or null or not provide)
+  #token: yes
+
+ + Delete a permission node: Route::delete('/nodePermission/{id}')
+  #input: id (url)
+  #token: yes
+
+ + Update permissions tree: Route::post('/nodePermission/tree')
+  #input: data: json (follow Nestable plugin)
+  #token: yes
+
+ + Get permissions tree of a role: Route::get('/roles/{id}/permission')
+  #input: data: id (url)
+  #token: yes
+
+ + Build or update permissions tree for a role: Route::post('/roles/{id}/permission')
+  #input: data: id (url), permission_id, status
+  #token: yes
+
+ + List roles of a parmission node: Route::get('/nodePermission/{id}/route')
+  #input: data: id (url): permission node id
+  #token: yes
+
+ + Add a role to a permission node: Route::post('/nodePermission/{id}/route')
+  #input: id (url): permission node id, route_name, route_method
+  #token: yes
+
+ + Datele a role from a permission node: Route::delete('/permissionRoute/{id}')
+  #input: data: id (url): permission node id
+  #token: yes
+
+ + Get all routes: Route::get('/routes')
+  #token: yes
+
+ + Get all routes has not been added to permissions tree: Route::post('/routesNotTree')
+  #token: yes
