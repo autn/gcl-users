@@ -1,6 +1,6 @@
 {
-    "name": "php-soft/laravel-users",
-    "description": "Laravel Users Module",
+    "name": "autn/gcl-users",
+    "description": "Laravel Users & Roles Module",
     "keywords": ["laravel", "module", "users"],
     "support": {
         "issues": "https://github.com/autn/gcl-users/issues",
