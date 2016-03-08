@@ -15,9 +15,16 @@ Install via composer - edit your `composer.json` to require the package.
 ```js
 "require": {
     // ...
-    "gcl/gcl-users": "dev-master",
+    "gcl/gcl-users": "2.0",
 }
 ```
+## Version Compatibility
+
+ GclUsers   | Laravel
+:-----------|:----------
+ 1.x        | 5.1.x
+ 2.x        | 5.2.x
+
 
 Then run `composer update` in your terminal to pull it in.
 Once this has finished, you will need to add the service provider to the `providers` array in your `app.php` config as follows:
