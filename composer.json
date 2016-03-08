@@ -3,8 +3,7 @@
     "description": "Laravel Users Module",
     "keywords": ["laravel", "module", "users"],
     "support": {
-        "issues": "https://github.com/autn/gcl-users/issues",
-        "source": "https://github.com/autn/gcl-users"
+        "source": "https://bitbucket.org/gg_autn/gcl"
     },
     "authors": [
         {
@@ -16,8 +15,8 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.2.*",
-        "php-soft/laravel-array-view": "1.1.4",
+        "laravel/framework": "5.1.*",
+        "php-soft/laravel-array-view": "1.1.x",
         "tymon/jwt-auth": "0.5.*",
         "zizaco/entrust": "dev-laravel-5",
         "doctrine/dbal": "^2.5",
@@ -29,9 +28,7 @@
         "phpunit/phpunit": "~4.0",
         "phpspec/phpspec": "~2.1",
         "squizlabs/php_codesniffer": "1.4.*@stable",
-        "phpmd/phpmd": "2.2.*",
-        "symfony/dom-crawler": "~3.0",
-        "symfony/css-selector": "~3.0"
+        "phpmd/phpmd": "2.2.*"
     },
     "autoload": {
         "classmap": [
@@ -73,7 +70,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
     "minimum-stability": "dev"
