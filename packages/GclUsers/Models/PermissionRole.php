@@ -41,10 +41,10 @@ class PermissionRole extends Model
         $permSaved = $this->getRoleSavedPermission($role_id);
 
         foreach ($tree as $key => $item) {
-            $result[$key]['id'] = (int) $item['id'];
+            $result[$key]['id'] = $item['id'];
             $result[$key]['name'] = $item['name'];
             $result[$key]['display_name'] = $item['display_name'];
-            $result[$key]['status'] = $this->checkStatus($item['id'], $permSaved) ? 1 : 0;
+            $result[$key]['status'] = $this->checkStatus($item['id'], $permSaved) ? "1" : "0";
 
             if (!empty($item['children'])) {
                 $result[$key]['children'] = $this->getRolePermission($role_id, $item['children']);
@@ -86,26 +86,5 @@ class PermissionRole extends Model
         }
 
         return false;
-    }
-
-    /**
-     * Get permission Role by permission id and role id
-     *
-     * @return model PermissionRole
-     */
-    public static function getPermissionRole($permission_id, $role_id)
-    {
-        $permissionRole = parent::where([
-            'permission_id' => $permission_id,
-            'role_id' => $role_id
-        ])->first();
-
-        if (!empty($permissionRole)) {
-            $permissionRole->permission_id = (int) $permissionRole->permission_id;
-            $permissionRole->role_id       = (int) $permissionRole->role_id;
-            $permissionRole->status        = (int) $permissionRole->status;
-        }
-
-        return $permissionRole;
     }
 }
