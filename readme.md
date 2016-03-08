@@ -15,7 +15,7 @@ Install via composer - edit your `composer.json` to require the package.
 ```js
 "require": {
     // ...
-    "gcl/gcl-users": "dev-master",
+    "gcl/gcl-users": "1.0",
 }
 ```
 
