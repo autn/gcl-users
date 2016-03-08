@@ -72,7 +72,7 @@ class User extends Model
      * @param  array  $attributes
      * @return bool|int
      */
-    public function update(array $attributes = [])
+    public function update(array $attributes = [], array $options = [])
     {
         if (isset($attributes['password'])) {
             $attributes['password'] = bcrypt($attributes['password']);

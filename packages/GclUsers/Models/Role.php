@@ -42,7 +42,7 @@ class Role extends Model
      * @param  array  $attributes
      * @return bool|int
      */
-    public function update(array $attributes = [])
+    public function update(array $attributes = [], array $options = [])
     {
         if (!parent::update($attributes)) {
             throw new Exception('Cannot update role.'); // @codeCoverageIgnore
