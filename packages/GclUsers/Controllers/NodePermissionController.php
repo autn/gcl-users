@@ -152,7 +152,7 @@ class NodePermissionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'permission_id' => 'required|integer',
-            'status'        => 'required'
+            'status'        => 'required|integer'
         ]);
 
         if ($validator->fails()) {
@@ -170,10 +170,7 @@ class NodePermissionController extends Controller
             return response()->json(null, 500); // @codeCoverageIgnore
         }
 
-        $permissionRole = PermissionRole::where([
-            'permission_id' => $request->permission_id,
-            'role_id' => $id
-        ])->first();
+        $permissionRole = PermissionRole::getPermissionRole($request->permission_id, $id);
 
         return response()->json(arrayView('gcl.gclusers::nodePermission/read', [
             'node' => json_encode($permissionRole)

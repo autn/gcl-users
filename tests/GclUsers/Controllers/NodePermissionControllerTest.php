@@ -41,7 +41,7 @@ class NodePermissionControllerTest extends TestCase
 
         $results = json_decode($res->getContent());
 
-        $this->assertEquals('[{"id":"2","name":"Login","display_name":"User login"}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"Login","display_name":"User login"}]', $results->entities);
     }
 
     public function testCreateNodePermissionWithoutParentSuccess()
@@ -57,7 +57,7 @@ class NodePermissionControllerTest extends TestCase
 
         $results = json_decode($res->getContent());
 
-        $this->assertEquals('[{"id":"2","name":"Login","display_name":"User login"}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"Login","display_name":"User login"}]', $results->entities);
     }
 
     public function testGetListPermissionNull()
@@ -96,7 +96,7 @@ class NodePermissionControllerTest extends TestCase
 
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('[{"id":"2","name":"Login","display_name":"User login"}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"Login","display_name":"User login"}]', $results->entities);
     }
 
     public function testUpdateInfoFailure()
@@ -182,7 +182,7 @@ class NodePermissionControllerTest extends TestCase
         ]);
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('[{"id":"2","name":"2","display_name":null},{"id":"7","name":"7","display_name":null},{"id":"3","name":"3","display_name":null,"children":[{"id":"4","name":"4","display_name":null,"children":[{"id":"5","name":"5","display_name":null},{"id":"6","name":"6","display_name":null}]}]}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"2","display_name":null},{"id":7,"name":"7","display_name":null},{"id":3,"name":"3","display_name":null,"children":[{"id":4,"name":"4","display_name":null,"children":[{"id":5,"name":"5","display_name":null},{"id":6,"name":"6","display_name":null}]}]}]', $results->entities);
     }
 
     public function testSaveAndListRolePermission()
@@ -218,31 +218,31 @@ class NodePermissionControllerTest extends TestCase
 
         // Post permission to role
         $res = $this->call('POST', '/roles/1/permission', [
-            'permission_id' => '2',
-            'status'        => '1'
+            'permission_id' => 2,
+            'status'        => 1
         ]);
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('{"id":"2","permission_id":"2","role_id":"1","status":"1"}', $results->entities);
+        $this->assertEquals('{"id":2,"permission_id":2,"role_id":1,"status":1}', $results->entities);
 
         $res = $this->call('POST', '/roles/1/permission', [
-            'permission_id' => '2',
-            'status'        => '0'
+            'permission_id' => 2,
+            'status'        => 0
         ]);
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('{"id":"2","permission_id":"2","role_id":"1","status":"0"}', $results->entities);
+        $this->assertEquals('{"id":2,"permission_id":2,"role_id":1,"status":0}', $results->entities);
 
         $res = $this->call('POST', '/roles/1/permission', [
-            'permission_id' => '3',
-            'status'        => '1'
+            'permission_id' => 3,
+            'status'        => 1
         ]);
 
         // Test list role permissions
         $res = $this->call('GET', '/roles/1/permission');
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('[{"id":"2","name":"2","display_name":null,"status":"0"},{"id":"3","name":"3","display_name":null,"status":"1","children":[{"id":"4","name":"4","display_name":null,"status":"0","children":[{"id":"5","name":"5","display_name":null,"status":"0"},{"id":"6","name":"6","display_name":null,"status":"0"}]}]},{"id":"7","name":"7","display_name":null,"status":"0"}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"2","display_name":null,"status":0},{"id":3,"name":"3","display_name":null,"status":1,"children":[{"id":4,"name":"4","display_name":null,"status":0,"children":[{"id":5,"name":"5","display_name":null,"status":0},{"id":6,"name":"6","display_name":null,"status":0}]}]},{"id":7,"name":"7","display_name":null,"status":0}]', $results->entities);
     }
 
     public function testRouteToPermission()
