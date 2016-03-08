@@ -193,7 +193,7 @@ class NodePermission extends Node {
         $result = [];
 
         foreach ($hierarchy as $key => $item) {
-            $result[$key]['id'] = $item['id'];
+            $result[$key]['id'] = (int) $item['id'];
             $result[$key]['name'] = $item['name'];
             $result[$key]['display_name'] = $item['display_name'];
 
