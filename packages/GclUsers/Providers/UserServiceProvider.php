@@ -52,7 +52,7 @@ class UserServiceProvider extends ServiceProvider
      */
     private function registerCommands()
     {
-        $this->app->singleton('gcl.gclusers.command.migration', function () {
+        $this->app->bindShared('gcl.gclusers.command.migration', function () {
             return new MigrationCommand();
         });
     }
