@@ -124,6 +124,74 @@ class PermissionRouteTest extends TestCase
         $this->assertEquals(200, $res->getStatusCode());
     }
 
+    public function testNotAllowGuestPermission()
+    {
+        // Post permission tree
+        NodePermission::model()->tree('[{"id":2, "name":"2"},{"id":3, "name":"3","children":[{"id":4, "name":"4","children":[{"id":5, "name":"5"},{"id":6, "name":"6"}]}]},{"id":7, "name":"7"}]');
+
+        $res = $this->call('POST', '/blog/1');
+        $this->assertEquals(401, $res->getStatusCode());
+
+        // add route to permission
+        PermissionRoute::setRoutePermissionsRoles(2, '/blog/{id}', 'POST');
+
+        $res = $this->call('POST', '/blog/1');
+        $this->assertEquals(401, $res->getStatusCode());
+
+        $guestRoleId = Role::where('name', 'guest')->lists('id');
+
+        // set a permisson
+        PermissionRole::create([
+            'permission_id' => 2,
+            'role_id' => $guestRoleId[0],
+            'status' => 0
+        ]);
+
+        $res = $this->call('POST', '/blog/1');
+        $this->assertEquals(401, $res->getStatusCode());
+
+        $res = $this->call('POST', '/blog/1', [], [], [], ['HTTP_Authorization' => "Bearer xxx"]);
+        $this->assertEquals(401, $res->getStatusCode());
+
+        // assign new role with name
+        $editor = factory(Role::class)->create(['name' => 'editor', 'active' => 1]);
+
+        $user = factory(App\User::class)->create(['password'=>bcrypt('123456')]);
+        $credentials = [ 'email' => $user->email, 'password' => '123456' ];
+        $token = JWTAuth::attempt($credentials);
+
+        $res = $this->call('POST', '/blog/1', [], [], [], ['HTTP_Authorization' => "Bearer {$token}"]);
+        $this->assertEquals(403, $res->getStatusCode());
+
+        // Test empty guest role
+        Role::where('name', '=', 'guest')->delete();
+
+        $res2 = $this->call('POST', '/blog/1');
+        $this->assertEquals(403, $res2->getStatusCode());
+    }
+
+    public function testAllowGuestPermission()
+    {
+        // Post permission tree
+        NodePermission::model()->tree('[{"id":2, "name":"2"},{"id":3, "name":"3","children":[{"id":4, "name":"4","children":[{"id":5, "name":"5"},{"id":6, "name":"6"}]}]},{"id":7, "name":"7"}]');
+
+        // add routes to permission
+        PermissionRoute::setRoutePermissionsRoles(2, '/password', 'PATCH');
+        PermissionRoute::setRoutePermissionsRoles(2, '/blog/{id}', 'POST');
+
+        $guestRoleId = Role::where('name', 'guest')->lists('id');
+
+        // set a permisson
+        PermissionRole::create([
+            'permission_id' => 2,
+            'role_id' => $guestRoleId[0],
+            'status' => 1
+        ]);
+
+        $res = $this->call('POST', '/blog/1');
+        $this->assertEquals(200, $res->getStatusCode());
+    }
+
     public function testNotHasAPermission()
     {
         // assign new role with name

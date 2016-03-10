@@ -38,6 +38,14 @@ namespace {
             $admin->active       = 1;
             $admin->save();
 
+            // create default guest roles
+            $guest = new Role;
+            $guest->name         = 'guest';
+            $guest->display_name = 'Guest';
+            $guest->description  = 'User are not logged in.';
+            $guest->active       = 1;
+            $guest->save();
+
             // attach roles
             $root->attachRole($admin);
 

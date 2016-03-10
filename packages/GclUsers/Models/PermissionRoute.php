@@ -5,6 +5,7 @@ namespace Gcl\GclUsers\Models;
 use Illuminate\Database\Eloquent\Model;
 use Gcl\GclUsers\Models\RoleUser;
 use Gcl\GclUsers\Models\PermissionRole;
+use Gcl\GclUsers\Models\Role;
 
 class PermissionRoute extends Model
 {
@@ -63,7 +64,7 @@ class PermissionRoute extends Model
         }
 
         foreach ($listRole as $role) {
-            $permissionRoot = PermissionRole::where(['role_id' => $role, 'permission_id' => '1'])->first();
+            $permissionRoot = PermissionRole::where(['role_id' => $role, 'permission_id' => 1])->first();
 
             if (!empty($permissionRoot) && $permissionRoot->status == 1) {
                 return true;
@@ -105,6 +106,51 @@ class PermissionRoute extends Model
         }
         // Get permission status
         $rolePerm = PermissionRole::whereIn('role_id', $listRole)->whereIn('permission_id', $permissions)->get();
+
+        if (!$rolePerm->count()) {
+            return false;
+        }
+
+        foreach ($rolePerm as $perm) {
+            if ($perm->status == 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check guest roles have a permission
+     *
+     * @param  $route
+     * @return boolean
+     */
+    public static function isAllowGuest(array $route = [])
+    {
+        // Get param
+        $route_method = $route['route_method'];
+        $route_name = $route['route_name'];
+
+        // Get roles
+        $guestRole = Role::where('name', 'guest')->lists('id');
+
+        if (!$guestRole->count()) {
+            return false;
+        }
+
+        // Get permission
+        $permissions = parent::where([
+            'route_method' => $route_method,
+            'route_name' => $route_name
+        ])->lists('permission_id')->toArray();
+
+        if (empty($permissions)) {
+            return false;
+        }
+
+        // Get permission status
+        $rolePerm = PermissionRole::whereIn('role_id', $guestRole)->whereIn('permission_id', $permissions)->get();
 
         if (!$rolePerm->count()) {
             return false;
