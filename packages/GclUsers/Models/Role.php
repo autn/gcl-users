@@ -26,17 +26,6 @@ class Role extends Model
     }
 
     /**
-     * Create a Role
-     *
-     * @param array $attributes
-     * @return Roles
-     */
-    // public function store($attributes = [])
-    // {
-    //     $this->
-    // }
-
-    /**
      * Update the model in the database.
      *
      * @param  array  $attributes
@@ -85,7 +74,7 @@ class Role extends Model
             'total'  => $total,
             'offset' => empty($options['offset']) ? 0 : $options['offset'],
             'limit'  => empty($options['limit']) ? 0 : $options['limit'],
-            'data'   => $find->get(),
+            'data'   => $find->where('name', '<>', 'guest')->get(),
         ];
     }
 

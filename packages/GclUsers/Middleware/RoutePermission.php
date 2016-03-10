@@ -50,15 +50,20 @@ class RoutePermission
         $route['route_method'] = $this->router->current()->methods()[0];
         $route['route_name'] = '/' . $this->router->current()->uri();
 
-        if (($user = $this->user($request)) === 401) {
-            return response()->json(null, 401);
-        }
+        $isAllowGuest = PermissionRouteModel::isAllowGuest($route);
 
-        $isAllPermission = PermissionRouteModel::isAllPermission($user);
+        if (!$isAllowGuest) {
 
-        if (!$isAllPermission) {
-            if (!PermissionRouteModel::hasPermission($user, $route)) {
-                return response()->json(null, 403);
+            if (($user = $this->user($request)) === 401) {
+                return response()->json(null, 401);
+            }
+
+            $isAllPermission = PermissionRouteModel::isAllPermission($user);
+
+            if (!$isAllPermission) {
+                if (!PermissionRouteModel::hasPermission($user, $route)) {
+                    return response()->json(null, 403);
+                }
             }
         }
 
@@ -83,7 +88,7 @@ class RoutePermission
         }
 
         if (!$user) {
-            return 401;
+            return 401; // @codeCoverageIgnore
         }
 
         return $user;

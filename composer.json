@@ -3,7 +3,8 @@
     "description": "Laravel Users & Roles Module",
     "keywords": ["laravel", "module", "users"],
     "support": {
-        "source": "https://bitbucket.org/gg_autn/gcl"
+        "issues": "https://github.com/autn/gcl-users/issues",
+        "source": "https://github.com/autn/gcl-users"
     },
     "authors": [
         {
