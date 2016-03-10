@@ -645,16 +645,16 @@ class UserControllerTest extends TestCase
         $results = json_decode($res->getContent());
         $this->assertEquals(3, count($results->entities));
         $this->assertEquals(1, $results->entities[0]->id);
-        $this->assertEquals(2, $results->entities[1]->id);
-        $this->assertEquals(3, $results->entities[2]->id);
+        $this->assertEquals(3, $results->entities[1]->id);
+        $this->assertEquals(4, $results->entities[2]->id);
 
         // test with oder id with desc
         $res = $this->call('GET', '/users/1/roles?sort=id&direction=desc', []);
         $this->assertEquals(200, $res->getStatusCode());
         $results = json_decode($res->getContent());
         $this->assertEquals(3, count($results->entities));
-        $this->assertEquals(3, $results->entities[0]->id);
-        $this->assertEquals(2, $results->entities[1]->id);
+        $this->assertEquals(4, $results->entities[0]->id);
+        $this->assertEquals(3, $results->entities[1]->id);
         $this->assertEquals(1, $results->entities[2]->id);
 
         // test with oder id with desc, page 2
