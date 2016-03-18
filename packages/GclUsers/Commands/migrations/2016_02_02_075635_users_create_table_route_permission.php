@@ -17,13 +17,13 @@ namespace {
          */
         public function up()
         {
-            Schema::create('route_permission', function (Blueprint $table) {
+           /* Schema::create('route_permission', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('route')->unique();
                 $table->string('permissions')->nullable();
                 $table->string('roles')->nullable();
                 $table->timestamps();
-            });
+            });*/
         }
 
         /**
@@ -33,7 +33,7 @@ namespace {
          */
         public function down()
         {
-            Schema::drop('route_permission');
+            /*Schema::drop('route_permission');*/
         }
     }
 

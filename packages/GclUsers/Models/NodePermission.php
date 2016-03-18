@@ -132,6 +132,14 @@ class NodePermission extends Node {
 
         if (!empty($tree)) {
             $root = $this->getRootNode();
+
+            // reset child of root node
+            $root->makeTree([[
+                'id' => $tree[0]['id'],
+                'name' => $tree[0]['name']
+            ]]);
+
+            // Make real node
             $root->makeTree($tree);
         }
 

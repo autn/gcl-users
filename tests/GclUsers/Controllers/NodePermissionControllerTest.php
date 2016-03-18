@@ -182,7 +182,7 @@ class NodePermissionControllerTest extends TestCase
         ]);
         $this->assertEquals(201, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals('[{"id":2,"name":"2","display_name":null},{"id":7,"name":"7","display_name":null},{"id":3,"name":"3","display_name":null,"children":[{"id":4,"name":"4","display_name":null,"children":[{"id":5,"name":"5","display_name":null},{"id":6,"name":"6","display_name":null}]}]}]', $results->entities);
+        $this->assertEquals('[{"id":2,"name":"2","display_name":null},{"id":3,"name":"3","display_name":null,"children":[{"id":4,"name":"4","display_name":null,"children":[{"id":5,"name":"5","display_name":null},{"id":6,"name":"6","display_name":null}]}]},{"id":7,"name":"7","display_name":null}]', $results->entities);
     }
 
     public function testSaveAndListRolePermission()

@@ -155,7 +155,7 @@ class RoleControllerTest extends TestCase
         $res = $this->call('GET', '/roles');
         $this->assertEquals(200, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals(1, count($results->entities));
+        $this->assertEquals(2, count($results->entities));
     }
 
     public function testBrowseFound()
@@ -166,7 +166,7 @@ class RoleControllerTest extends TestCase
             $roles[] = factory(Role::class)->create();
         }
 
-        $roles = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
+        $roles = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         $res = $this->call('GET', '/roles');
         $this->assertEquals(200, $res->getStatusCode());
@@ -185,7 +185,7 @@ class RoleControllerTest extends TestCase
             $roles[] = factory(Role::class)->create();
         }
 
-        $roles = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
+        $roles = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         //check order roles with emty params
         $res = $this->call('GET', '/roles');
@@ -219,9 +219,9 @@ class RoleControllerTest extends TestCase
         for ($i = 0; $i < 10; ++$i) {
             $roles[] = factory(Role::class)->create(['name' => 'admin '.$i, 'display_name' => 'Administrator '.$i]);
         }
-        $rolesID = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
-        $rolesDisplayName = Role::select('*')->where('name', '<>', 'guest')->orderBy('display_name', 'asc')->get();
-        $rolesName = Role::select('*')->where('name', '<>', 'guest')->orderBy('name', 'desc')->get();
+        $rolesID = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
+        $rolesDisplayName = Role::select('*')->orderBy('display_name', 'asc')->get(); // add ->where('name', '<>', 'guest') if not get guest
+        $rolesName = Role::select('*')->orderBy('name', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         // check order roles with full input
         $res = $this->call('GET', '/roles?sort=name&direction=desc');
@@ -290,6 +290,6 @@ class RoleControllerTest extends TestCase
         $res = $this->call('GET', $nextLink);
         $this->assertEquals(200, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals(1, count($results->entities));
+        $this->assertEquals(2, count($results->entities));
     }
 }
