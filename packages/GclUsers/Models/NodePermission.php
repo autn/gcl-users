@@ -181,7 +181,7 @@ class NodePermission extends Node {
     {
         $tree = parent::where('id', '=', $root_id)->first()->getDescendants/*AndSelf*/()->toHierarchy();
 
-        $result = json_encode($this->hierarchyToArr($tree->toArray()));
+        $result = $this->hierarchyToArr($tree->toArray()); // Add json_encode if return string
 
         return $result;
     }

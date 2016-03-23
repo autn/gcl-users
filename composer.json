@@ -1,6 +1,6 @@
 {
     "name": "autn/gcl-users",
-    "description": "Laravel Users & Roles Module",
+    "description": "Laravel Users & Roles Package",
     "keywords": ["laravel", "module", "users"],
     "support": {
         "issues": "https://github.com/autn/gcl-users/issues",

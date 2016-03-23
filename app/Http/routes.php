@@ -52,6 +52,7 @@ Route::group(['middleware'=>'routePermission'], function() {
     Route::delete('/nodePermission/{id}', '\Gcl\GclUsers\Controllers\NodePermissionController@destroy');
     Route::post('/nodePermission/tree', '\Gcl\GclUsers\Controllers\NodePermissionController@updateTree');
     Route::get('/roles/{id}/permission', '\Gcl\GclUsers\Controllers\NodePermissionController@getRolePerm');
+    Route::get('/roles/{id}/allPermission', '\Gcl\GclUsers\Controllers\NodePermissionController@checkAllPerm');
     Route::post('/roles/{id}/permission', '\Gcl\GclUsers\Controllers\NodePermissionController@storePermToRole');
     Route::get('/nodePermission/{id}/route', '\Gcl\GclUsers\Controllers\PermissionRouteController@index');
     Route::post('/nodePermission/{id}/route', '\Gcl\GclUsers\Controllers\PermissionRouteController@store');
