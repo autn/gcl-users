@@ -43,7 +43,7 @@ namespace {
             // Create table for storing permissions
             Schema::create('permissions', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('name')->nullable();
+                $table->string('name');
                 $table->string('display_name')->nullable();
                 $table->string('description')->nullable();
                 $table->integer('parent_id')->nullable()->index();
@@ -76,6 +76,7 @@ namespace {
                 $table->foreign('role_id')->references('id')->on('roles')
                     ->onUpdate('cascade')->onDelete('cascade');
 
+                // $table->primary(['permission_id', 'role_id']);
             });
         }
 

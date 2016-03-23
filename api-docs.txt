@@ -24,8 +24,12 @@
   #input: data: id (url)
   #token: yes
 
+ + Check is have all permissions of a role: Route::get('/roles/{id}/allPermission')
+  #input: data: id (url)
+  #token: yes
+
  + Build or update permissions tree for a role: Route::post('/roles/{id}/permission')
-  #input: data: id (url), permission_id, status
+  #input: data: id (url), permission_id (all permissions: permission_id = 1), status
   #token: yes
 
  + List roles of a parmission node: Route::get('/nodePermission/{id}/route')

@@ -1,6 +1,8 @@
 <?php
 
 use Gcl\GclUsers\Models\Role;
+use Gcl\GclUsers\Models\PermissionRole;
+use Gcl\GclUsers\Models\NodePermission;
 
 class RoleControllerTest extends TestCase
 {
@@ -155,7 +157,7 @@ class RoleControllerTest extends TestCase
         $res = $this->call('GET', '/roles');
         $this->assertEquals(200, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals(1, count($results->entities));
+        $this->assertEquals(2, count($results->entities));
     }
 
     public function testBrowseFound()
@@ -166,7 +168,7 @@ class RoleControllerTest extends TestCase
             $roles[] = factory(Role::class)->create();
         }
 
-        $roles = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
+        $roles = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         $res = $this->call('GET', '/roles');
         $this->assertEquals(200, $res->getStatusCode());
@@ -185,7 +187,7 @@ class RoleControllerTest extends TestCase
             $roles[] = factory(Role::class)->create();
         }
 
-        $roles = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
+        $roles = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         //check order roles with emty params
         $res = $this->call('GET', '/roles');
@@ -219,9 +221,9 @@ class RoleControllerTest extends TestCase
         for ($i = 0; $i < 10; ++$i) {
             $roles[] = factory(Role::class)->create(['name' => 'admin '.$i, 'display_name' => 'Administrator '.$i]);
         }
-        $rolesID = Role::select('*')->where('name', '<>', 'guest')->orderBy('id', 'desc')->get();
-        $rolesDisplayName = Role::select('*')->where('name', '<>', 'guest')->orderBy('display_name', 'asc')->get();
-        $rolesName = Role::select('*')->where('name', '<>', 'guest')->orderBy('name', 'desc')->get();
+        $rolesID = Role::select('*')->orderBy('id', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
+        $rolesDisplayName = Role::select('*')->orderBy('display_name', 'asc')->get(); // add ->where('name', '<>', 'guest') if not get guest
+        $rolesName = Role::select('*')->orderBy('name', 'desc')->get(); // add ->where('name', '<>', 'guest') if not get guest
 
         // check order roles with full input
         $res = $this->call('GET', '/roles?sort=name&direction=desc');
@@ -290,6 +292,49 @@ class RoleControllerTest extends TestCase
         $res = $this->call('GET', $nextLink);
         $this->assertEquals(200, $res->getStatusCode());
         $results = json_decode($res->getContent());
-        $this->assertEquals(1, count($results->entities));
+        $this->assertEquals(2, count($results->entities));
+    }
+
+    public function testCanPermissionAndHasRole()
+    {
+        $this->withoutMiddleware();
+
+        $user = factory(App\User::class)->create(['password'=>bcrypt('123456')]);
+        $credentials = [ 'email' => $user->email, 'password' => '123456' ];
+        $token = JWTAuth::attempt($credentials);
+
+        $editor = factory(Role::class)->create(['name' => 'editor', 'active' => 1]);
+        $partner = factory(Role::class)->create(['name' => 'partner', 'active' => 1]);
+
+        // add role to user
+        $user->attachRole($editor);
+
+        $this->assertEquals(true, $user->hasRole('editor'));
+        $this->assertEquals(false, $user->hasRole('admin'));
+        $this->assertEquals(false, $user->can('delete-user'));
+        $this->assertEquals(false, $user->can(['delete-user', 'create-user']));
+
+        // Add permission
+        NodePermission::model()->tree('[{"id":2, "name":"2"},{"id":3, "name":"delete-user","children":[{"id":4, "name":"create-post","children":[{"id":5, "name":"5"},{"id":6, "name":"6"}]}]},{"id":7, "name":"7"}]');
+        PermissionRole::create([
+            'permission_id' => 3,
+            'role_id' => $editor->id,
+            'status' => 1
+        ]);
+
+        $this->assertEquals(true, $user->can('delete-user'));
+        $this->assertEquals(true, $user->can(['delete-user', 'create-user']));
+
+        $this->assertEquals(false, $user->can('create-post'));
+
+        $user->attachRole($partner);
+        PermissionRole::create([
+            'permission_id' => 4,
+            'role_id' => $partner->id,
+            'status' => 1
+        ]);
+        $this->assertEquals(true, $user->can('create-post'));
+        $this->assertEquals(true, $user->can(['create-post', 'delete-post']));
+        $this->assertEquals(true, $user->can(['create-post', 'delete-post', 'delete-user']));
     }
 }

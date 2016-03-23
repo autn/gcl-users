@@ -62,7 +62,7 @@ class NodePermissionController extends Controller
 
         return response()->json(arrayView('gcl.gclusers::nodePermission/read', [
             'node' => $tree
-        ]), 201);
+        ]), 200);
     }
 
     /**
@@ -173,7 +173,7 @@ class NodePermissionController extends Controller
         $permissionRole = PermissionRole::getPermissionRole($request->permission_id, $id);
 
         return response()->json(arrayView('gcl.gclusers::nodePermission/read', [
-            'node' => json_encode($permissionRole)
+            'node' => $permissionRole // Add json_encode if return string
         ]), 201);
     }
 
@@ -192,7 +192,38 @@ class NodePermissionController extends Controller
         $roles = NodePermission::model()->rolePerm($id);
 
         return response()->json(arrayView('gcl.gclusers::nodePermission/read', [
-            'node' => json_encode($roles)
-        ]), 201);
+            'node' => $roles // Add json_encode if return string
+        ]), 200);
+    }
+
+    /**
+     * Check role is have all permission action
+     *
+     * @param Request
+     * @return Response
+     */
+    public function checkAllPerm($id = null)
+    {
+        if (!Role::find($id)) {
+            return response()->json(null, 404);
+        }
+
+        $permissionRoot = PermissionRole::where(['role_id' => $id, 'permission_id' => 1])->first();
+
+        if (!empty($permissionRoot) && $permissionRoot->status == 1) {
+            $isAll = true;
+        } else {
+            $isAll = false;
+        }
+
+        $roles = [
+            'id'    => (int)$id,
+            'type'  => 'permissions',
+            'isAll' => $isAll
+        ];
+
+        return response()->json(arrayView('gcl.gclusers::nodePermission/read', [
+            'node' => $roles // Add json_encode if return string
+        ]), 200);
     }
 }

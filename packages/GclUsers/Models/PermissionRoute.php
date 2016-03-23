@@ -104,6 +104,7 @@ class PermissionRoute extends Model
         if (empty($permissions)) {
             return false;
         }
+
         // Get permission status
         $rolePerm = PermissionRole::whereIn('role_id', $listRole)->whereIn('permission_id', $permissions)->get();
 
