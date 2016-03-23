@@ -248,6 +248,22 @@ $admin->attachPermission($createPost);
 // equivalent to $admin->perms()->sync(array($createPost->id));
 ```
 
+Now we can check for roles and permissions simply by doing:
+
+```php
+$user->hasRole('owner');   // false
+$user->hasRole('admin');   // true
+$user->can('edit-user');   // false
+$user->can('create-post'); // true
+```
+
+Both `hasRole()` and `can()` can receive an array of roles & permissions to check:
+
+```php
+$user->hasRole(['owner', 'admin']);       // true
+$user->can(['edit-user', 'create-post']); // true
+```
+
 ### 3.3 Forgot password
 
 To send mail forgot password,
