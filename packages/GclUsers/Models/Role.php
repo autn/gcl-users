@@ -73,7 +73,7 @@ class Role extends Model
             'total'  => $total,
             'offset' => empty($options['offset']) ? 0 : $options['offset'],
             'limit'  => empty($options['limit']) ? 0 : $options['limit'],
-            'data'   => $find->where('name', '<>', 'guest')->get(),
+            'data'   => $find->get(), // add where('name', '<>', 'guest') if not get guest
         ];
     }
 
