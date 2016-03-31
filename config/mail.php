@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'autn@greenglobal.vn', 'name' => 'System'],
+    'from' => ['address' => 'no-reply@example.com', 'name' => 'System'],
 
     /*
     |--------------------------------------------------------------------------

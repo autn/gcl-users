@@ -2,7 +2,6 @@
 
 namespace Gcl\GclUsers\Controllers;
 
-use Input;
 use Auth;
 use JWTAuth;
 use Validator;
@@ -198,10 +197,10 @@ class UserController extends Controller
         $isTrash = $request->is('users/trash');
 
         $users = AppUser::browse([
-            'order'     => [ Input::get('sort', 'id') => Input::get('direction', 'desc') ],
-            'limit'     => ($limit = (int)Input::get('limit', 25)),
-            'cursor'    => Input::get('cursor'),
-            'offset'    => (Input::get('page', 1) - 1) * $limit,
+            'order'     => [ $request->input('sort', 'id') => $request->input('direction', 'desc') ],
+            'limit'     => ($limit = (int)$request->input('limit', 25)),
+            'cursor'    => $request->input('cursor'),
+            'offset'    => ($request->input('page', 1) - 1) * $limit,
             'filters'   => $request->all(),
             'trash'     => $isTrash
         ]);

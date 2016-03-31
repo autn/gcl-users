@@ -2,17 +2,12 @@
 
 namespace Gcl\GclUsers\Controllers;
 
-use Input;
 use Auth;
 use Validator;
 use Illuminate\Http\Request;
 use Gcl\GclUsers\Models\NodePermission;
 use Gcl\GclUsers\Models\PermissionRole;
 use Gcl\GclUsers\Models\Role;
-use App\User as AppUser;
-// use JWTAuth;
-// use Tymon\JWTAuth\Exceptions\JWTException;
-// use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 /**
  * Authenticate
