@@ -2,7 +2,7 @@
 
 /**
  * Array View Helper
- * 
+ *
  * @param  array  $items
  * @return array
  */
@@ -20,7 +20,7 @@ return function ($items = []) {
     if (count($items)) {
         $last = $items[count($items) - 1];
 
-        $queries = Input::all();
+        $queries = Request::all();
         $queries = array_merge($queries, [
             'cursor' => $last->id,
         ]);

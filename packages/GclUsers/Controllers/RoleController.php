@@ -1,7 +1,6 @@
 <?php
 namespace Gcl\GclUsers\Controllers;
 
-use Input;
 use Validator;
 use Illuminate\Http\Request;
 use Gcl\GclUsers\Models\Role;
@@ -126,9 +125,9 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::browse([
-            'order'     => [ Input::get('sort', 'id') => Input::get('direction', 'desc') ],
-            'limit'     => ($limit = (int)Input::get('limit', 25)),
-            'offset'    => (Input::get('page', 1) - 1) * $limit,
+            'order'     => [ $request->input('sort', 'id') => $request->input('direction', 'desc') ],
+            'limit'     => ($limit = (int)$request->input('limit', 25)),
+            'offset'    => ($request->input('page', 1) - 1) * $limit,
             'filters'   => $request->all()
         ]);
 
@@ -142,7 +141,7 @@ class RoleController extends Controller
      * @param  int $id
      * @return json
      */
-    public function indexByUser($id)
+    public function indexByUser(Request $request, $id)
     {
         $user = \App\User::find($id);
 
@@ -151,9 +150,9 @@ class RoleController extends Controller
         }
 
         $roles = Role::browseByUser([
-            'order'     => [ Input::get('sort', 'name') => Input::get('direction', 'asc') ],
-            'limit'     => ($limit = (int)Input::get('limit', 25)),
-            'offset'    => (Input::get('page', 1) - 1) * $limit,
+            'order'     => [ $request->input('sort', 'name') => $request->input('direction', 'asc') ],
+            'limit'     => ($limit = (int)$request->input('limit', 25)),
+            'offset'    => ($request->input('page', 1) - 1) * $limit,
             'user'      => $user
         ]);
 

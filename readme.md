@@ -1,6 +1,6 @@
 # Laravel Users Module
 
-[![Build Status](https://travis-ci.org/php-soft/laravel-users.svg)](https://travis-ci.org/php-soft/laravel-users)
+[![Build Status](https://travis-ci.org/autn/gcl-users.svg)](https://travis-ci.org/autn/gcl-users)
 
 > This module is use JWTAuth and ENTRUST libraries
 >
@@ -87,6 +87,8 @@ Running Seeders with command:
 $ php artisan db:seed --class=UserModuleSeeder
 ```
 
+Note: Run seeders after use `UserTrait` in your existing `App\User` model, follow 3.2 below
+
 ## 3. Usage
 
 ### 3.1. Authenticate with JSON Web Token
@@ -97,10 +99,17 @@ You need to change class `App\User` to inherit from `Gcl\GclUsers\Models\User` a
 namespace App;
 
 // ...
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Gcl\GclUsers\Models\User as GclUser;
 
-class User extends GclUser implements AuthenticatableContract, CanResetPasswordContract
+class User extends GclUser implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
+    use Authenticatable, CanResetPassword;
+
     // ...
 
     // You need allows fill attributes as follows
@@ -178,6 +187,7 @@ Route::group(['middleware'=>'routePermission'], function() {
     Route::delete('/nodePermission/{id}', '\Gcl\GclUsers\Controllers\NodePermissionController@destroy');
     Route::post('/nodePermission/tree', '\Gcl\GclUsers\Controllers\NodePermissionController@updateTree');
     Route::get('/roles/{id}/permission', '\Gcl\GclUsers\Controllers\NodePermissionController@getRolePerm');
+    Route::get('/roles/{id}/allPermission', '\Gcl\GclUsers\Controllers\NodePermissionController@checkAllPerm');
     Route::post('/roles/{id}/permission', '\Gcl\GclUsers\Controllers\NodePermissionController@storePermToRole');
     Route::get('/nodePermission/{id}/route', '\Gcl\GclUsers\Controllers\PermissionRouteController@index');
     Route::post('/nodePermission/{id}/route', '\Gcl\GclUsers\Controllers\PermissionRouteController@store');
@@ -187,6 +197,8 @@ Route::group(['middleware'=>'routePermission'], function() {
     Route::get('/routesNotTree', '\Gcl\GclUsers\Controllers\PermissionRouteController@getAllRoutesNotTree');
 });
 ```
+
+Note: You can add this to your middleware groups `api`
 
 Apache seems to discard the Authorization header if it is not a base64 encoded user/pass combo. So to fix this you can add the following to your apache config
 
@@ -210,12 +222,12 @@ Use the `UserTrait` trait in your existing `App\User` model. For example:
 ```php
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// ...
 use Gcl\GclUsers\Models\UserTrait;
 
-class User extends Model
+class User extends GclUser implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use UserTrait; // add this trait to your user model
+    use UserTrait, Authenticatable, CanResetPassword; // add this trait to your user model
     // ...
 }
 ```

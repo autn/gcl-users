@@ -2,7 +2,6 @@
 namespace Gcl\GclUsers\Controllers;
 
 use Auth;
-use Input;
 use Route;
 use Validator;
 use Illuminate\Http\Request;
