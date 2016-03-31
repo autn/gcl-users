@@ -1,6 +1,6 @@
 # Laravel Users Module
 
-[![Build Status](https://travis-ci.org/php-soft/laravel-users.svg)](https://travis-ci.org/php-soft/laravel-users)
+[![Build Status](https://travis-ci.org/autn/gcl-users.svg)](https://travis-ci.org/autn/gcl-users)
 
 > This module is use JWTAuth and ENTRUST libraries
 >
